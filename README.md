@@ -1,8 +1,9 @@
 # MAGSplitter
+<hr>
 Script to split MAG files into individual MAG files.
 
 ### Background Information
-
+***
 Currently (August 2022), metapathways outputs are outputted in the form of ePGDBs readable for pathway tools
 . In other words, the outputs signify entire metagenomes, rather than individual MAGs. If the end user were to 
 want to look at metabolic pathway information for a single MAG, they would need to redo the metapathways pipeline
@@ -19,16 +20,16 @@ Following, the reactions are split into individual MAGs, and new 0.pf files are 
 
 
 ### Approach
-
+***
 * The ORF metabolic information outputted by metapathways is converted from PGDB format to a dataframe
 * A list of missing ORFs are used to de-remove the removal of ORFs from the ePGDB file.
 * A mapping file between ORFs and metagenome contigs are converted into a dataframe
 * A mapping file between metagenome contigs and MAGs are converted into a dataframe
 * Mapping files are then used to group the ORFs by MAGs.
 
-### Required FIles
+### Inputs
+***
 
-Inputs
 * 0.pf: pathway tools initial input from metapathways outputs
 (found in /ptools/)
 
@@ -41,3 +42,10 @@ and the rest being the duplicates
 
 * config_info.tsv: map of contigs to MAGs created through the WGS pipeline binning process.  
 (found in /binning/results/greedy)
+
+### Usage 
+***
+MAGSplitter is meant to be used after the WGS and the metapathways pipeline.  
+To use this script, open the "main.py" file with your favorite IDE.  change the variables "pf_file",
+"0rf_map_file", "orf_contig_map_file", and "contig_mag_map_file" into the appropriate paths for your file locations.  
+Run "main.py", and the folders will be located in the /results folder.
