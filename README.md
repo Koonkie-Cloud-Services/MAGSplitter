@@ -1,5 +1,4 @@
 # MAGSplitter
-<hr>
 Script to split MAG files into individual MAG files.
 
 ### Background Information
@@ -46,6 +45,6 @@ and the rest being the duplicates
 ### Usage 
 ***
 MAGSplitter is meant to be used after the WGS and the metapathways pipeline.  
-To use this script, open the "main.py" file with your favorite IDE.  change the variables "pf_file",
+To use this script, open the "main.py" file with your favorite IDE.  Change the variables "pf_file",
 "0rf_map_file", "orf_contig_map_file", and "contig_mag_map_file" into the appropriate paths for your file locations.  
 Run "main.py", and the folders will be located in the /results folder.

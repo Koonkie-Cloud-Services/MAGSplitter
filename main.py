@@ -1,6 +1,7 @@
 from input_to_df import *
 from dataframe_manipulation import *
 from ptools_writing import *
+import argparse
 
 '''
 #####
@@ -20,6 +21,7 @@ and the rest being the duplicates
 config_info.tsv: map of contigs to MAGs created through the WGS pipeline binning process.  
 (found in /binning/results/greedy)
 
+
 #####
 Outputs
 The program will create a folder called "results" in the MAGSplitter folder.
@@ -31,6 +33,8 @@ organism-params.dat: which I will also ask Ryan about
 pathologic.log: pre-written file, which I should ask Ryan about
 <sample_name>.dummy.txt: Dummy output file
 '''
+
+
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
 # File name inputs, which are default set to the example folder
@@ -40,13 +44,37 @@ orf_contig_map_file = "example/GAPP-5498e568-6918-4000-b27e-dbeff35eeee7.ORF_ann
 contig_mag_map_file = "example/contig_info.tsv"
 
 
+def get_args() -> None:
+    parser = argparse.ArgumentParser(description='Convert metapathways output to ePGDB readable format')
+    parser.add_argument(
+        '-pf', '--pf_file',
+        help='metapathways ePGDB output file location (typically ptools/0.pf)',
+        required=True)
+    parser.add_argument(
+        '-orf', '--orf_mapping',
+        help='metapathways duplicate ORF mapping file location (typically results/annotation_table/orf_map.txt)',
+        required=True)
+    parser.add_argument(
+        '-contig', '--orf_contig_map_file',
+        help='metapathways orf to contig mapping file location '
+             '(typically results/annotation_table/<samplename>.ORF_annotation_table.txt)',
+        required=True)
+    parser.add_argument(
+        '-mag', '--contig_mag_map',
+        help='wgs pipeline contig contig to mag mapping file location '
+             '(typically binning/results/greedy/config_info.tsv',
+        required=True)
+    return parser.parse_args()
+
+
 def main():
     # Import MP/WGS pipeline outputs
-    df_pf = convert_pl_input_to_rxn_df(pf_file)
-    df_duplicate_orf_map = convert_duplicate_orf_map_to_list(orf_map_file)
-    orf_contig_map = convert_orf_contig_map_to_df(orf_contig_map_file)
+    args = get_args()
+    df_pf = convert_pl_input_to_rxn_df(args.pf_file)
+    df_duplicate_orf_map = convert_duplicate_orf_map_to_list(args.orf_mapping)
+    orf_contig_map = convert_orf_contig_map_to_df(args.orf_contig_map_file)
     sample_name = sample_name_grabber(orf_contig_map)
-    contig_mag_map = convert_contig_mag_map_to_df(contig_mag_map_file)
+    contig_mag_map = convert_contig_mag_map_to_df(args.contig_mag_map)
     print("file imports done")
     df_pf = undo_orf_removal(df_pf, df_duplicate_orf_map)
     print("ORF de-remover done")
@@ -56,15 +84,6 @@ def main():
     ptools_folder_creator(DIR_PATH, sample_name, df_pf_split)
     print("ptools folder creation done")
 
-"""   
-# Parse arguments
-    parser = argparse.ArgumentParser(description='Convert metapathways output to ePGDB readable format')
-    parser.add_argument('-i', '--input', help='metapathways output name (normally 0.pf)', required=True)
-    parser.add_argument('-o', '--output', help='output file', required=True)
-    parser.add_argument('-m', '--metacyc', help='metacyc accession map', required=True)
-    parser.add_argument('-c', '--contig_mag_map', help='contig mag map', required=True)
-    parser.add_argument('-e', '--orf_map', help='orf map', required=True)
-    args = parser.parse_args()
-"""
+
 if __name__ == '__main__':
     main()
