@@ -45,6 +45,23 @@ and the rest being the duplicates
 ### Usage 
 ***
 MAGSplitter is meant to be used after the WGS and the metapathways pipeline.  
-To use this script, open the "main.py" file with your favorite IDE.  Change the variables "pf_file",
-"0rf_map_file", "orf_contig_map_file", and "contig_mag_map_file" into the appropriate paths for your file locations.  
-Run "main.py", and the folders will be located in the /results folder.
+To use this script, set main.py as an executable file.  Following, pass the file locations for the input files as arguments.
+A "results" folder will be created in the directory of MAGSplitter, and the output files will be stored there.
+```
+options:
+  -h, --help            show this help message and exit
+  -pf PF_FILE, --pf_file PF_FILE
+                        metapathways ePGDB output file location (typically ptools/0.pf)
+  -orf ORF_MAPPING, --orf_mapping ORF_MAPPING
+                        metapathways duplicate ORF mapping file location (typically results/annotation_table/orf_map.txt)
+  -contig ORF_CONTIG_MAP_FILE, --orf_contig_map_file ORF_CONTIG_MAP_FILE
+                        metapathways orf to contig mapping file location (typically results/annotation_table/<samplename>.ORF_annotation_table.txt)
+  -mag CONTIG_MAG_MAP, --contig_mag_map CONTIG_MAG_MAP
+                        wgs pipeline contig contig to mag mapping file location (typically binning/results/greedy/config_info.tsv
+```
+
+```
+example usage:
+python main.py -pf example/0.pf -orf example/orf_map.txt -contig example/GAPP-5498e568-6918-4000-b27e-dbeff35eeee7.ORF_annotation_table.txt -mag example/contig_info.tsv
+```
+
