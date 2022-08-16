@@ -1,14 +1,16 @@
 import pandas as pd
-import numpy as np
+import dask.dataframe as dd
 from typing import List
-
+import time
+from multiprocessing import Pool
+import itertools
 
 # These functions are to combine each of the mapping and ePGDB dataframes into a list of dataframes split by MAGs.
 
 
 # Since we now have the names of deleted ORFs in a clean format, we can add
 # deleted ORF reactions back into the rxn dataframe
-def undo_orf_removal(df_rxn: pd.DataFrame, duplicate_orf_map: List[List[str]]) -> pd.DataFrame:
+def undo_orf_removal_test(df_rxn: pd.DataFrame, duplicate_orf_map: List[List[str]]) -> pd.DataFrame:
     """
     Add in extra rows that were deleted from metapathways output, done previously to optimize usage of pathway tools
     NOT RUNTIME OPTIMIZED
@@ -18,17 +20,30 @@ def undo_orf_removal(df_rxn: pd.DataFrame, duplicate_orf_map: List[List[str]]) -
     """
     # Open the orf map file, and only choose the maps that have at least two ORFs in each row
     # The ones with only one ORF indicate that there are no duplicates of that rxn
+    start = time.perf_counter()
+    # We use rxn_acc to accumulate all the new rows that we are going to add to the df_rxn dataframe
+    rxn_acc = []
     for rxn in duplicate_orf_map:
         intact_orf = rxn[0]
+        found_rxn_row = None  # This will change when the row in df_rxn is found for first time in set of matching rxns
         for deleted_orf in range(1, len(rxn)):
-            # Create a new dataframe with only the intact ORF, change the ID to a deleted ORF, then add it back into
-            # our big dataframe
-            df_rxn = pd.concat([df_rxn,
-                                (df_rxn.loc[df_rxn['ORF_ID'] == intact_orf].
-                                 assign(ORF_ID=rxn[deleted_orf],
-                                        NAME="NAME"+rxn[deleted_orf][2:]))], ignore_index=True)
+            # Create a new dataframe with only the intact ORF, change the ID to a deleted ORF, and accumulate them
+            if found_rxn_row is None:
+                found_rxn_row = df_rxn[df_rxn['ORF_ID'] == intact_orf]
+                # Case where no matching ORF is found
+                if found_rxn_row.empty:
+                    raise Exception("No matching ORF found for ORF_ID: " + intact_orf)
+                    break
+            rxn_acc.append(
+                found_rxn_row.
+                    assign(ORF_ID=rxn[deleted_orf],
+                           NAME="NAME" + rxn[deleted_orf][2:]))
+    # Combine rxn dataframe with rxn accumulator dataframe
+    rxn_acc = pd.concat(rxn_acc, ignore_index=True)
+    df_rxn = pd.concat([df_rxn, rxn_acc], ignore_index=True)
+    end = time.perf_counter()
+    print("Time to undo orf removal: " + str(end - start))
     return df_rxn
-
 
 # Combine the rxn dataframe with the orf:contig and contig:mag dataframes
 def combine_rxn_contig_map(df_rxn: pd.DataFrame, df_contig_map: pd.DataFrame) -> pd.DataFrame:
@@ -85,7 +100,7 @@ def sample_name_grabber(rxn_df: pd.DataFrame) -> pd.DataFrame:
     # If we only have the sample name without contig ID, turn <is_only_sample> to True
     is_only_sample = False
     while end_idx > 0 and is_only_sample is False:
-        if full_str[end_idx-1] == '_':
+        if full_str[end_idx - 1] == '_':
             is_only_sample = True
             end_idx -= 1
         else:
