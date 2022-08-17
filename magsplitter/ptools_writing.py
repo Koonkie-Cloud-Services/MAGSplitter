@@ -1,7 +1,11 @@
+import logging
 import pandas as pd
 import os
-from typing import List
 from shutil import rmtree
+
+
+class DirectoryError(BaseException):
+    pass
 
 
 # File creator functions are to create all the pf files required for pathway tools in a pf folder
@@ -89,7 +93,7 @@ def dummy_file_creator(file_path: str, sample_name: str) -> None:
     return None
 
 
-def ptools_folder_creator(target_folder, sample_name:str, rxn_processed: dict[pd.DataFrame]) -> None:
+def ptools_folder_creator(target_folder, sample_name: str, rxn_processed: dict[pd.DataFrame]) -> None:
     """
     Main program to create all folders of pf files, to be inputted into pathway tools,
     from a list of rxn dataframes.
@@ -103,12 +107,13 @@ def ptools_folder_creator(target_folder, sample_name:str, rxn_processed: dict[pd
     :return: None
     """
     # Create the results folder
-    results_path = os.path.join(target_folder, "results")
+    results_path = os.path.abspath(os.path.join(target_folder, "./results"))
     if os.path.exists(results_path) and os.path.isdir(results_path):
+        logging.info(f"{os.path.abspath(results_path)} exists, removing...")
         rmtree(results_path)
     os.mkdir(results_path)
-
     # Iterate through every single mag df in the dict of mag rxn dataframes
+
     for mag_df in rxn_processed:
         # Create the folder for the current mag df
         mag_path = os.path.join(results_path, mag_df)

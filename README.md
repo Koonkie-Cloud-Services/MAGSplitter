@@ -44,9 +44,10 @@ and the rest being the duplicates
 
 ### Usage 
 ***
-MAGSplitter is meant to be used after the WGS and the metapathways pipeline.  
-To use this script, set main.py as an executable file.  Following, pass the file locations for the input files as arguments.
-A "results" folder will be created in the directory of MAGSplitter, and the output files will be stored there.
+MAGSplitter is meant to be used after the WGS and the metapathways pipeline.  There are two options to run MAGsplitter
+#### **Option 1**: 
+To use this script  pass the file locations for the input files as arguments.
+A "results" folder will be created in the current working directory
 ```
 options:
   -h, --help            show this help message and exit
@@ -62,6 +63,28 @@ options:
 
 ```
 example usage:
-python main.py -pf example/0.pf -orf example/orf_map.txt -contig example/GAPP-5498e568-6918-4000-b27e-dbeff35eeee7.ORF_annotation_table.txt -mag example/contig_info.tsv
+python ./magsplitter/main.py -pf example/0.pf -orf example/orf_map.txt -contig example/GAPP-5498e568-6918-4000-b27e-dbeff35eeee7.ORF_annotation_table.txt -mag example/contig_info.tsv
+```
+
+#### **Option 2**:
+You can also run this as a full package.  First install using pip install:
+```
+pip install -e .
+```
+Then run with a command line entry point to main, with the same argument options as listed above.  
+
+```
+example usage:
+magsplitter ./magsplitter/main.py -pf example/0.pf -orf example/orf_map.txt -contig example/GAPP-5498e568-6918-4000-b27e-dbeff35eeee7.ORF_annotation_table.txt -mag example/contig_info.tsv
+```
+### Example usage
+We can also call the program to run on a mock metagenome dataset by not supplying arguments to the program
+This can be called with either
+```commandline
+python ./magsplitter/main.py
+```
+or if the package is installed:
+```commandline
+magsplitter 
 ```
 

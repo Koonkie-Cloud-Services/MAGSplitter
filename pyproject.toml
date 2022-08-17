@@ -1,0 +1,44 @@
+[build-system]
+requires = [
+    "setuptools>=61.0.0",
+    "wheel>=0.34.2",
+    "setuptools-scm[toml]>=6.2"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = 'magsplitter'
+description = 'magsplitter allows for splitting ePGDB files from metapathways into individual outputs for each MAG.'
+authors = [{name = "Immanuel Abdi", email='immanuelazn@gmail.com'}]
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Intended Audience :: Science/Research',
+    'Topic :: Scientific/Engineering :: Bio-Informatics',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10'
+]
+requires-python = '>=3.7'
+readme= 'README.md'
+dependencies = [
+    "pandas>=1.4.3",
+]
+dynamic = ['version']
+
+[project.urls]
+homepage = 'https://github.com/Koonkie-Cloud-Services/MAGSplitter'
+documentation = 'https://github.com/Koonkie-Cloud-Services/MAGSplitter'
+repository = 'https://github.com/Koonkie-Cloud-Services/MAGSplitter'
+
+[tool.setuptools.packages] # Package discovery
+find = {}
+
+[tool.setuptools_scm]
+write_to = "magsplitter/_version.py"
+
+[project.scripts]
+magsplitter = 'magsplitter.main:main'
+

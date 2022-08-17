@@ -1,9 +1,7 @@
 import pandas as pd
-import dask.dataframe as dd
 from typing import List
 import time
-from multiprocessing import Pool
-import itertools
+
 
 # These functions are to combine each of the mapping and ePGDB dataframes into a list of dataframes split by MAGs.
 

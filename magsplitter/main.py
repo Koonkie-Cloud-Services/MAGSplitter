@@ -1,6 +1,6 @@
-from input_to_df import *
-from dataframe_manipulation import *
-from ptools_writing import *
+from magsplitter.input_to_df import *
+from magsplitter.dataframe_manipulation import *
+from magsplitter.ptools_writing import *
 import argparse
 import logging
 import sys
@@ -35,13 +35,14 @@ pathologic.log: pre-written file, which I should ask Ryan about
 '''
 
 
-DIR_PATH = os.path.dirname(os.path.realpath(__file__))
-
+DIR_PATH = os.getcwd()
+FILE_PATH =  os.path.dirname(os.path.abspath(__file__))
 # File name inputs, which are default set to the example folder
-pf_file = 'example/0.pf'
-orf_map_file = 'example/orf_map.txt'
-orf_contig_map_file = "example/GAPP-5498e568-6918-4000-b27e-dbeff35eeee7.ORF_annotation_table.txt"
-contig_mag_map_file = "example/contig_info.tsv"
+pf_file = os.path.abspath(os.path.join(FILE_PATH, './example/0.pf'))
+orf_map_file = os.path.abspath(os.path.join(FILE_PATH, './example/orf_map.txt'))
+orf_contig_map_file = os.path.abspath(
+    os.path.join(FILE_PATH, "./example/GAPP-5498e568-6918-4000-b27e-dbeff35eeee7.ORF_annotation_table.txt"))
+contig_mag_map_file = os.path.abspath(os.path.join(FILE_PATH, "./example/contig_info.tsv"))
 
 
 def get_args() -> argparse.Namespace:
@@ -89,4 +90,6 @@ def main():
 
 
 if __name__ == '__main__':
+    print(DIR_PATH)
+    print(os.getcwd())
     main()
