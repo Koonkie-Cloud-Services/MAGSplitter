@@ -24,18 +24,19 @@ def undo_orf_removal_test(df_rxn: pd.DataFrame, duplicate_orf_map: List[List[str
     for rxn in duplicate_orf_map:
         intact_orf = rxn[0]
         found_rxn_row = None  # This will change when the row in df_rxn is found for first time in set of matching rxns
-        for deleted_orf in range(1, len(rxn)):
-            # Create a new dataframe with only the intact ORF, change the ID to a deleted ORF, and accumulate them
-            if found_rxn_row is None:
-                found_rxn_row = df_rxn[df_rxn['ORF_ID'] == intact_orf]
-                # Case where no matching ORF is found
-                if found_rxn_row.empty:
-                    raise Exception("No matching ORF found for ORF_ID: " + intact_orf)
-                    break
-            rxn_acc.append(
-                found_rxn_row.
-                    assign(ORF_ID=rxn[deleted_orf],
-                           NAME="NAME" + rxn[deleted_orf][2:]))
+        if intact_orf in list(df_rxn['ORF_ID']): # only use ORF clusters that exist in the 0.pf file
+            for deleted_orf in range(1, len(rxn)):
+                # Create a new dataframe with only the intact ORF, change the ID to a deleted ORF, and accumulate them
+                if found_rxn_row is None:
+                    found_rxn_row = df_rxn[df_rxn['ORF_ID'] == intact_orf]
+                    # Case where no matching ORF is found
+                    if found_rxn_row.empty:
+                        raise Exception("No matching ORF found for ORF_ID: " + intact_orf)
+                        break
+                rxn_acc.append(
+                    found_rxn_row.
+                        assign(ORF_ID=rxn[deleted_orf],
+                               NAME="NAME" + rxn[deleted_orf][2:]))
     # Combine rxn dataframe with rxn accumulator dataframe
     rxn_acc = pd.concat(rxn_acc, ignore_index=True)
     df_rxn = pd.concat([df_rxn, rxn_acc], ignore_index=True)
