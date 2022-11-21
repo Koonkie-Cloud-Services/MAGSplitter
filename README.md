@@ -3,8 +3,8 @@ Script to split MAG files into individual MAG files.
 
 ### Background Information
 ***
-Currently (August 2022), metapathways outputs are outputted in the form of ePGDBs readable for pathway tools
-. In other words, the outputs of metapathways signify entire metagenomes, rather than individual MAGs. If the end user were to 
+Currently,the Metapathways pipeline outputs are created in the form of ePGDBs readable for pathway tools.
+In other words, the outputs of metapathways signify entire metagenomes, rather than individual MAGs. If the end user were to 
 want to look at metabolic pathway information for a single MAG, they would need to redo the metapathways pipeline
 for each single MAG. This is inefficient in terms of time and resources. Therefore, this tool alleviates this 
 inefficiency by taking the outputs from the WGS pipeline and the metapathways pipeline, and splitting the metabolic
