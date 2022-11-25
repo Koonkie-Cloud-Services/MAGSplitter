@@ -37,7 +37,7 @@ repository = 'https://github.com/Koonkie-Cloud-Services/MAGSplitter'
 find = {}
 
 [tool.setuptools_scm]
-write_to = "magsplitter/_version.py"
+version_scheme = "release-branch-semver"
 
 [project.scripts]
 magsplitter = 'magsplitter.main:main'
