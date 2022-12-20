@@ -1,5 +1,5 @@
 # MAGSplitter
-Script to split MAG files into individual MAG files.
+Script downstream of a community MetaPathways run, to split results by metagenomic bin.  Used for metagenomic bin-specific pathway inference from Pathway Tools.
 
 ### Background Information
 ***
