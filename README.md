@@ -76,7 +76,7 @@ Then run with a command line entry point to main, with the same argument options
 example usage:
 magsplitter ./magsplitter/main.py -pf example/0.pf -orf example/orf_map.txt -contig example/GAPP-5498e568-6918-4000-b27e-dbeff35eeee7.ORF_annotation_table.txt -mag example/contig_info.tsv
 ```
-### Example usage
+### Mock community run
 We can also call the program to run on a mock metagenome dataset by not supplying arguments to the program
 This can be called with either
 ```commandline
